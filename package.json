@@ -1,0 +1,22 @@
+{
+    "name": "medimove-main",
+    "version": "1.0.0",
+    "description": "A logistic management website for the Medimove project",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon app.js"
+    },
+    "author": "Medimove Group",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.20.2",
+        "ejs": "^3.1.10",
+        "express": "^4.19.2",
+        "html5-qrcode": "^2.3.8",
+        "mongoose": "^8.5.1",
+        "morgan": "^1.10.0",
+        "nodemon": "^3.1.4",
+        "qrcode": "^1.5.4"
+    }
+}
