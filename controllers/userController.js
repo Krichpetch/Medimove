@@ -1,5 +1,5 @@
+const Route = require('../models/route');
 const Ride = require('../models/ride');
-
 
 //userIndex
 const userIndexGet = (req, res) => {
@@ -16,15 +16,35 @@ const trackRideStatus = (req, res) => {
 };
 
 // Handle QR code scan to update position
-const updatePosition = (req, res) => {
+const confirmDeliveryPost = (req, res) => {
     const rideId = req.params.id;
-    const position = req.body;
+    const status = req.body.status; // Get the status from the form
 
-    Ride.findByIdAndUpdate(rideId, { position }, { new: true })
-        .then(result => res.status(200).json({ status: 'Delivery Completed', data: result }))
+    // Update the ride's status in the database
+    Ride.findByIdAndUpdate(rideId, { status }, { new: true })
+        .then(result => {
+            if (!result) {
+                return res.status(404).json({ status: 'Ride not found' });
+            }
+            // Redirect to the index page after the update
+            res.redirect('/user/index');
+        })
         .catch(err => res.status(500).send(err.message));
+};
 
-    res.redirect(`/user/index`);
+const getConfirmDelivery = async(req, res) => {
+    const id = req.params.id;
+    try {
+        const ride = await Ride.findById(id);
+        if (ride) {
+            res.render('user_confirm', { order: ride });
+        } else {
+            res.render('404', { title: 'Page not found' });
+        }
+    } catch (err) {
+        console.error(err); // Log the error for debugging
+        res.render('404', { title: 'Error', error: err.message });
+    }
 };
 
 //QR Scanner
@@ -32,32 +52,10 @@ const QRScannerGet = (req, res) => {
     res.render('scanner');
 };
 
-// Confirm delivery by scanning QR code
-const confirmDelivery = (req, res) => {
-    const { rideId } = req.body;
-
-    Ride.findByIdAndUpdate(rideId, { status: 'Delivered' }, { new: true })
-        .then(result => res.json({ status: 'Delivery Confirmed', data: result }))
-        .catch(err => res.status(500).send(err.message));
-};
-
-// app.get('/scan', (req, res) => {
-//     const targetUrl = req.query.targetUrl;
-
-//     // Validate targetUrl to ensure it is a safe URL
-//     if (targetUrl) {
-//         // Perform any additional server-side processing if necessary
-
-//         // Redirect to the target URL
-//         res.redirect(targetUrl);
-//     } else {
-//         res.status(400).send('Invalid URL');
-//     }
-// });
-
 module.exports = {
     userIndexGet,
     trackRideStatus,
-    updatePosition,
+    confirmDeliveryPost,
+    getConfirmDelivery,
     QRScannerGet
 };

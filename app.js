@@ -3,8 +3,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const userRoutes = require('../routes/userRoutes');
-const driverRoutes = require('../routes/driverRoutes');
+const userRoutes = require('./routes/userRoutes');
+const driverRoutes = require('./routes/driverRoutes');
 
 // express app
 const app = express();
@@ -30,8 +30,8 @@ app.get('/', (req, res) => {
     res.render('index', { title: 'Index' });
 });
 
-app.use("/.netlify/functions/app", router);
-module.exports.handler = serverless(app);
+// app.use("/.netlify/functions/app", router);
+// module.exports.handler = serverless(app);
 
 app.use('/driver', driverRoutes);
 app.use('/user', userRoutes);

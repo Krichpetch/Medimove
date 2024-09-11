@@ -76,6 +76,9 @@ const orderingPost = (req, res) => {
 // Handle QR code scan to update position
 const checkStatus = (req, res) => {
     const rideId = req.params.id;
+
+    console.log(rideId);
+
     Ride.findById(rideId)
         .then(ride => {
             if (ride.status === 'Delivery Completed') {
@@ -91,8 +94,7 @@ const checkStatus = (req, res) => {
 
 const getUrl = (protocol, host, id) => {
 
-    const newUrl = `
-                            $ { protocol }: //${host}${'/user/confirm-delivery/'}${id}`
+    const newUrl = `${protocol}://${host}${'/user/confirm-delivery/'}${id}`
     return newUrl;
 };
 

@@ -73,16 +73,16 @@
 
         // Polling every 5 seconds
         setInterval(() => {
-            fetch(`/driver/check-qr-status/${rideId}`)
+            fetch(`/driver/scan-qr/${rideId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.scanned) {
                         // If the QR has been scanned, redirect to the homepage
-                        window.location.href = '/driver/homepage';
+                        window.location.href = '/driver/select-building';
                     }
                 })
                 .catch(err => console.error(err));
-        }, 3000);
+        }, 7000);
     </script>
 
 </body>
