@@ -10,11 +10,13 @@ const driverRoutes = require('./routes/driverRoutes');
 const app = express();
 
 // connect to mongodb & listen for requests
-const dbURI = "mongodb+srv://Test1:Medimove@webapp.tjqisgo.mongodb.net/";
+const mongoose = require('mongoose');
+const dbURI = process.env.MONGODB_URI;
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(result => app.listen(3000))
-    .catch(err => console.log(err));
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err) => console.log(err));
+
 
 // register view engine
 app.set('view engine', 'ejs');
@@ -30,8 +32,6 @@ app.get('/', (req, res) => {
     res.render('index', { title: 'Index' });
 });
 
-// app.use("/.netlify/functions/app", router);
-// module.exports.handler = serverless(app);
 
 app.use('/driver', driverRoutes);
 app.use('/user', userRoutes);
